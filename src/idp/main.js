@@ -12,6 +12,12 @@ if ('serviceWorker' in navigator) {
   });
 } 
  
+class Sanitizer {
+  constructor(origin) {
+
+  }
+}
+
 
 class IDPScript extends HTMLElement {
   constructor() {
@@ -19,13 +25,13 @@ class IDPScript extends HTMLElement {
     // This is specific to CE and required by the spec.
     super();
     import(/* webpackChunk: 'worker-dom' */ '@ampproject/worker-dom/dist/amp/main.mjs').then((res) => {
-        res.upgradeElement(this, './v0.idp-framework.eth/domworker.mjs')
+        res.upgradeElement(this, document.location.origin + '/v0.idp-framework.eth/domworker.mjs')
     })
     console.log('idp src ', this.getAttribute('src'))
   }
 }
 
-window.customElements.define('idp-script', IDPWorker);
+window.customElements.define('idp-script', IDPScript);
 
 // origin == parse window.location
 // popovers are real same-origin iframes also validated
