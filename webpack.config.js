@@ -26,6 +26,7 @@ module.exports = {
       new CopyWebpackPlugin({ patterns: [
         { from: './node_modules/@ampproject/worker-dom/dist/amp/worker/worker.mjs', to: './v0.idp-framework.eth/domworker.mjs' },
         { from: './node_modules/@ampproject/worker-dom/dist/amp/worker/worker.js', to: './v0.idp-framework.eth/domworker.js' },
+        { from: './src/idp/sw.js', to: './sw.js' },
         { from: './src/static', to: '.'}
       ]})
   ],

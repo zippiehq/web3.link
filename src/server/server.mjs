@@ -42,9 +42,10 @@ app.use(router)
 function validate(body) {
     return new Promise((resolve, reject) => {
         let failures = 0 
-
+        let inside_tag
         const parser = new htmlparser2.Parser({
             onopentag(name, attribs) {
+                inside_tag = name               
                 // XXX watch out for svg hrefs and script tags in
                 console.log(name, attribs)
     
@@ -71,9 +72,12 @@ function validate(body) {
                 }
             },
             ontext(text) {
+                if (inside_tag === 'script')
+                    failures++
                 console.log("-->", text);
             },
             onclosetag(tagname) {
+                inside_tag = null
                 console.log('close ' + tagname)
             },
             onend() {
