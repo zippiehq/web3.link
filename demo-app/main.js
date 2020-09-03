@@ -10,3 +10,7 @@ x.onmessage = function(event) {
 */
 
 console.log('hello world boo far lar')
+var div = document.createElement('div')
+div.textContent = 'hello world'
+document.body.appendChild(div)
+

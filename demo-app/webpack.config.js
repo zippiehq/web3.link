@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   mode: 'development',
+  devtool: 'source-map',
   entry: { main: path.resolve(__dirname, 'main.js') },
 
    plugins: [
@@ -22,7 +23,7 @@ module.exports = {
       client: path.resolve(__dirname, 'devserverclient.js'),
       server: 'ws'
     },
-    injectClient: true,
+    injectClient: false,
     injectHot: false,
     port: 9000
   },
