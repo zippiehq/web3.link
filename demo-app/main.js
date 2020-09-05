@@ -1,16 +1,27 @@
 
-/* var x = new WebSocket('ws://localhost:9000/sockjs-node')
-x.onmessage = function(event) {
-   console.log(event.data)   
-   let parsed = JSON.parse(event.data)
-   if (parsed.type === 'invalid') {
-      window.location.reload()
-   }
+import { h, render, Component } from 'preact';
+
+class App extends Component {
+  // Initialise our state. For now we only store the input value
+  state = { value: '' }
+
+  onInput = ev => {
+    // This will schedule a state update. Once updated the component
+    // will automatically re-render itself.
+    this.setState({ value: ev.target.value });
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        <form>
+          <input type="text" value={this.state.value} onInput={this.onInput} />
+          <button type="submit">Update</button>
+        </form>
+      </div>
+    );
+  }
 }
-*/
 
-console.log('hello world boo far lar')
-var div = document.createElement('div')
-div.textContent = 'hello world'
-document.body.appendChild(div)
-
+render(<App />, document.body);

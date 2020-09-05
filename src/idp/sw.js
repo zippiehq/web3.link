@@ -12,6 +12,7 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('fetch', function (event) {
     if (event.request.url.startsWith(self.location.origin + '/localhost:')) {
          event.respondWith(fetch(new Request('http://localhost:' + event.request.url.slice((self.location.origin + '/localhost:').length))))
+         return
     }
     // do we have a live ipfs connection on the page to ask for requests instead? if not, fall back to CDN
     console.log(event)
