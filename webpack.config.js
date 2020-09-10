@@ -2,6 +2,7 @@ const path = require('path');
 
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const BrotliPlugin = require('brotli-webpack-plugin')
 
 module.exports = {
   mode: 'development',
@@ -28,12 +29,18 @@ module.exports = {
         { from: './node_modules/@ampproject/worker-dom/dist/amp/worker/worker.js', to: './v0.idp-framework.eth/domworker.js' },
         { from: './src/idp/sw.js', to: './sw.js' },
         { from: './src/static', to: '.'}
-      ]})
+      ]}),
+      new BrotliPlugin({
+            asset: '[path].br[query]',
+            test: /\.(js|mjs)$/,
+            threshold: 2000,
+            minRatio: 0.8
+      })
   ],
 
   output: {
     filename: 'v0.idp-framework.eth/main.js',
-    chunkFilename: 'v0.idp-framework.eth/[name].[chunkhash:8].chunk.js',
+    chunkFilename: 'v0.idp-framework.eth/[name].chunk.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/'
   }

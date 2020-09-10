@@ -24,8 +24,8 @@ class IDPScript extends HTMLElement {
     // If you define a constructor, always call super() first!
     // This is specific to CE and required by the spec.
     super();  
-    import(/* webpackChunk: 'worker-dom' */ '@ampproject/worker-dom/dist/amp/main.mjs').then((res) => {
-        res.upgradeElement(this, document.location.origin + '/v0.idp-framework.eth/domworker.mjs')
+    import(/* webpackChunkName: 'worker-dom' */ '@ampproject/worker-dom/dist/amp/main.mjs').then((res) => {
+        res.upgradeElement(this, document.location.origin + '/v0.idp-framework.eth/domworker.js')
     })
     console.log('idp src ', this.getAttribute('src'))
   }

@@ -26,6 +26,9 @@ import bodyParser from 'body-parser'
 import Router from 'express-promise-router'
 import IpfsHttpClient from 'ipfs-http-client'
 import htmlparser2 from 'htmlparser2'
+import mime from 'mime-types'
+import fs from 'fs'
+import path from 'path'
 
 const app = express()
 const router = new Router();
@@ -42,6 +45,7 @@ app.use(router)
 function validate(body) {
     return new Promise((resolve, reject) => {
         let failures = 0 
+	let scripts = []
         let inside_tag
         const parser = new htmlparser2.Parser({
             onopentag(name, attribs) {
@@ -70,6 +74,9 @@ function validate(body) {
                 if (name === 'frameset') {
                     failures++
                 }
+		if (name === 'idp-script') {
+                    scripts.push(attribs['src'])
+                }
             },
             ontext(text) {
                 if (inside_tag === 'script')
@@ -81,7 +88,7 @@ function validate(body) {
                 console.log('close ' + tagname)
             },
             onend() {
-                resolve(failures === 0)
+                resolve({failures, scripts: scripts})
             }
         },
             { decodeEntities: true }
@@ -91,23 +98,52 @@ function validate(body) {
     })
 }
 
-async function ipfs_fetch(cid) {
+async function ipfs_fetch(path) {
+    if (fs.existsSync('dist/' + path.slice(1))) {
+       return fs.readFileSync('dist/' + path.slice(1))
+    } 
     const chunks = []
-    for await (const chunk of ipfs.cat(cid)) {
+    for await (const chunk of ipfs.cat(path)) {
         chunks.push(chunk)
     }
     const contents = Buffer.concat(chunks)
     return contents
 }
 
-router.get(/.*\.html$/, async (req, res) => {
-    res.set('Content-Type', 'text/html');
+router.get(/.*$/, async (req, res) => {
+    let content
+    let brotli = false
+    try {
+      content = await ipfs_fetch(req.path + '.br')
+      brotli = true
+    } catch (err) {
+    }
+    try {
+       if (!content) 
+	  content = await ipfs_fetch(req.path)
+    } catch (err) {
+       res.status(500).send(err.toString())
+       return
+    }
+
+    let type = mime.lookup(req.path)
     res.set('X-Content-Type-Options', 'nosniff')
-    let content = await ipfs_fetch(req.path)
-    if (await validate(content))
-        res.send(content)
-    else 
-        res.status(400).send('Does not pass validation')
+    res.set('Content-Type', type)
+    res.set('Cache-Control', 'max-age=3600')
+    if (brotli) {
+       res.set('Content-Encoding', 'br')
+    }
+    if (type === 'text/html') {
+        let validation = await validate(content)
+	if (validation.failures > 0) {
+          res.status(400).send('Does not pass validation')
+          return
+       }
+       let dirname = path.dirname(req.path)
+       res.set('Service-Worker-Allowed', '/')
+       res.set('Link', '</v0.idp-framework.eth/main.js>; as=script; rel=preload, </v0.idp-framework.eth/vendors~worker-dom.chunk.js>; as=script; rel=preload, </v0.idp-framework.eth/domworker.js>; as=fetch; rel=preload; crossorigin, <' + dirname + '/' + validation.scripts[0] + '>; as=fetch; rel=preload; crossorigin')
+    }
+    res.send(content)
 })
 
 async function init() {
