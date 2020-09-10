@@ -1,27 +1,12 @@
 
 import { h, render, Component } from 'preact';
+import htm from 'htm';
 
-class App extends Component {
-  // Initialise our state. For now we only store the input value
-  state = { value: '' }
+// Initialize htm with Preact
+const html = htm.bind(h);
 
-  onInput = ev => {
-    // This will schedule a state update. Once updated the component
-    // will automatically re-render itself.
-    this.setState({ value: ev.target.value });
-  }
-
-  render() {
-    return (
-      <div>
-        <h1>Hello, world!</h1>
-        <form>
-          <input type="text" value={this.state.value} onInput={this.onInput} />
-          <button type="submit">Update</button>
-        </form>
-      </div>
-    );
-  }
+function App (props) {
+   return html`<h1>Hello ${props.name}!</h1>`;
 }
 
-render(<App />, document.body);
+render(html`<${App} name="World" />`, document.body);
