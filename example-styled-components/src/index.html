@@ -1,0 +1,14 @@
+<html idp>
+    <head>
+        <meta charset="utf-8" />
+        <script async src="/v0.idp-framework.eth/main.js"></script>
+    </head> 
+    <body>
+        <!-- <script> is not allowed -->
+        <!-- <foo on* is not allowed -->
+        <idp-script src="main.js">
+           <div id="root"></div>
+        </idp-script>  <!-- bar.js runs in a sandboxed web worker with a remote DOM and governs everything underneath this tag -->
+        <!-- web worker has access to localStorage -->
+    </body>
+</html>
