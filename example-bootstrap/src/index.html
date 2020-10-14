@@ -1,0 +1,20 @@
+<html idp>
+    <head>
+        <meta charset="utf-8" />
+        <script async src="/v0.idp-framework.eth/main.js"></script>
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+  integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+  crossorigin="anonymous"
+/>
+    </head> 
+    <body>
+        <!-- <script> is not allowed -->
+        <!-- <foo on* is not allowed -->
+        <idp-script src="main.js">
+           <div id="root"></div>
+        </idp-script>  <!-- bar.js runs in a sandboxed web worker with a remote DOM and governs everything underneath this tag -->
+        <!-- web worker has access to localStorage -->
+    </body>
+</html>
