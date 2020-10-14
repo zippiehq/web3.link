@@ -4,8 +4,8 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "build": "tailwind build src/tailwind.css -c tailwind.config.js -o src/index.css && webpack --config webpack.config.js",
-    "start": "tailwind build src/tailwind.css -c tailwind.config.js -o src/index.css && webpack-dev-server --config webpack.config.js",
+    "build": "NODE_ENV=production tailwind build src/tailwind.css -c tailwind.config.js -o src/index.css && webpack --config webpack.config.js",
+    "start": "NODE_ENV=production tailwind build src/tailwind.css -c tailwind.config.js -o src/index.css && webpack-dev-server --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
