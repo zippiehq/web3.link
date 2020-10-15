@@ -2,15 +2,19 @@ const path = require("path");
 
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-  mode: "development",
+  mode: "production",
   devtool: "source-map",
   entry: { main: path.resolve(__dirname, "src/main.js") },
-
   plugins: [
     new CopyWebpackPlugin({ patterns: [{ from: "src/index.html", to: "." }, { from: "src/index.css", to: "." }, { from: "src/static", to: "." } ] }),
   ],
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
   module: {
     rules: [
       {
@@ -23,7 +27,12 @@ module.exports = {
     ],
   },
   resolve: {
-      extensions: [".js", ".jsx"]
+      extensions: [".js", ".jsx"],
+    alias: {
+      react: 'preact/compat',
+      'react-dom/test-utils': 'preact/test-utils',
+      'react-dom': 'preact/compat',
+    }
   },
   devServer: {
     contentBase: path.join(__dirname, "dist"),
