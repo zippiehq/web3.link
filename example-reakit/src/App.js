@@ -1,9 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Button } from "reakit/Button";
+import { useDialogState, Dialog, DialogDisclosure } from "reakit/Dialog";
 
-function App() {
-  return <Button>Button</Button>;
+function Example() {
+  const dialog = useDialogState();
+  return (
+    <>
+      <DialogDisclosure {...dialog}>Open dialog</DialogDisclosure>
+      <Dialog {...dialog} aria-label="Welcome">
+        Welcome to Reakit!
+      </Dialog>
+    </>
+  );
 }
 
-export default App;
+export default Example;

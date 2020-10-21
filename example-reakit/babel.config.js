@@ -11,8 +11,7 @@ module.exports = {
   plugins: [
     "@babel/plugin-transform-runtime",
     "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-proposal-class-properties",
-    "auto-async"
+    "@babel/plugin-proposal-class-properties"
   ],
   env: {
     production: {
