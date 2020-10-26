@@ -1,4 +1,5 @@
-module.exports = {
+export default {
+    open: true,
     port: 8080,
     watch: true,
     nodeResolve: true,
