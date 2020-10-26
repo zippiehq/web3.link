@@ -1,3 +1,5 @@
+import cors from '@koa/cors';
+
 export default {
     open: true,
     port: 8080,
@@ -7,5 +9,6 @@ export default {
     rootDir: 'build/',
     cors: true,
     plugins: [],
+    middleware: [cors()],
     moduleDirs: ['node_modules', 'web_modules'],
 };
