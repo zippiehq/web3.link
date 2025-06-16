@@ -35,15 +35,15 @@ To allow the system to resolve outcomes (e.g. assign computation slots) ahead of
 
 This early resolution window allows the system to coordinate ahead of time, while still ensuring full public verifiability once `R` arrives.
 
-## L1 Time Anchoring for Timelock Rounds
+## L1 Bid Finality Anchoring
 
-To securely enforce the timeline (e.g., "before reveal"), the protocol uses **Ethereum L1 block hashes** as a trust anchor:
+To ensure a consistent and immutable set of encrypted bids, the protocol relies on **Ethereum L1 block hashes** as a finality anchor:
 
-- A known L1 block hash `H_L1` is used to establish when drand round `R - Δ` should be available.
-- The system maps block timestamps to drand rounds using the known emission rate (e.g., one round every 30 seconds).
-- Smart contracts and watchers can use `H_L1` to determine whether early evaluation is allowed.
+- A known Ethereum L1 block hash `H_L1` is **relayed to L2 or referenced off-chain** to mark the bidding cutoff point.
+- Once this block is finalized and observed, participants can be certain that **no additional bids will be accepted**, and the encrypted bid set is complete.
+- This allows early decryption using drand round `R - Δ` to begin safely, with all participants operating on the same bid data.
 
-This anchoring ensures that timelock boundaries are objectively and securely enforced using the Ethereum base layer.
+This mechanism ensures that early resolution operates over a sealed, finalized dataset and is consistent across L1, L2, and off-chain environments.
 
 ## TEE-Based Early Proofs Across L2s
 
